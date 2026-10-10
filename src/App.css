@@ -1,0 +1,2206 @@
+
+/* =========================================================
+   HARRY POTTER CHARACTER QUIZ
+   FULL-WIDTH DESIGN SYSTEM
+   ========================================================= */
+
+/* =========================================================
+   1. DESIGN TOKENS
+   ========================================================= */
+
+   :root {
+    color-scheme: dark;
+  
+    --bg: #0b0a0d;
+    --bg-soft: #100e13;
+  
+    --surface: #17151b;
+    --surface-hover: #201c25;
+    --surface-selected: #27212d;
+  
+    --gold: #d6b36a;
+    --gold-bright: #efd28f;
+    --gold-muted: #9f8650;
+  
+    --text: #f4f0e7;
+    --text-soft: #c9c3b7;
+    --text-muted: #918a80;
+  
+    --border: rgba(214, 179, 106, 0.17);
+    --border-strong: rgba(214, 179, 106, 0.42);
+  
+    --danger: #e28a8a;
+  
+    --radius-sm: 9px;
+    --radius-md: 15px;
+    --radius-lg: 24px;
+  
+    --page-padding: clamp(20px, 4vw, 64px);
+    --section-gap: clamp(48px, 6vw, 88px);
+  
+    font-family:
+      Inter,
+      ui-sans-serif,
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      sans-serif;
+  }
+  
+  
+  /* =========================================================
+     2. GLOBAL RESET
+     ========================================================= */
+  
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+  
+  html {
+    width: 100%;
+    min-height: 100%;
+    margin: 0;
+  
+    background: var(--bg);
+  
+    scroll-behavior: smooth;
+    scrollbar-color: var(--gold-muted) var(--bg);
+  }
+  
+  body,
+  #root {
+    width: 100%;
+    min-width: 320px;
+    min-height: 100vh;
+    margin: 0;
+  }
+  
+  body {
+    overflow-x: hidden;
+  
+    background: var(--bg);
+    color: var(--text);
+  
+    font-family:
+      Inter,
+      ui-sans-serif,
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      sans-serif;
+  
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+    color: inherit;
+  }
+  
+  button {
+    margin: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  h1,
+  h2,
+  h3,
+  p {
+    margin: 0;
+  }
+  
+  button:focus-visible,
+  [role="button"]:focus-visible {
+    outline: 2px solid var(--gold-bright);
+    outline-offset: 4px;
+  }
+  
+  ::selection {
+    background: rgba(214, 179, 106, 0.3);
+    color: var(--text);
+  }
+  
+  
+  /* =========================================================
+     3. APP — FULL SCREEN CANVAS
+     ========================================================= */
+  
+  .app {
+    position: relative;
+    isolation: isolate;
+  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    margin: 0;
+  
+    padding: clamp(32px, 5vh, 64px) var(--page-padding);
+  
+    background:
+      radial-gradient(
+        ellipse at 50% 0%,
+        rgba(214, 179, 106, 0.095),
+        transparent 48%
+      ),
+      radial-gradient(
+        ellipse at 0% 100%,
+        rgba(214, 179, 106, 0.035),
+        transparent 35%
+      ),
+      var(--bg);
+  
+    color: var(--text);
+  }
+  
+  /* Subtle ambient glow without adding visual clutter. */
+  
+  .app::before {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+  
+    background:
+      linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.012) 50%,
+        transparent
+      );
+  
+    content: "";
+    pointer-events: none;
+  }
+  
+  
+  /* =========================================================
+     4. SHARED WIDTH SYSTEM
+     ========================================================= */
+  
+  .start-screen,
+  .quiz-screen,
+  .loading-screen,
+  .error-screen,
+  .results-screen {
+    width: 100%;
+    min-width: 0;
+    margin-inline: auto;
+  }
+  
+  .start-screen,
+  .quiz-screen,
+  .loading-screen,
+  .error-screen,
+  .results-screen {
+    animation: screen-enter 350ms ease both;
+  }
+  
+  .start-screen,
+  .error-screen,
+  .loading-screen {
+    max-width: 1100px;
+  }
+  
+  .quiz-screen,
+  .results-screen {
+    max-width: 1800px;
+  }
+  
+  @keyframes screen-enter {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+  
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  
+  /* =========================================================
+     5. TYPOGRAPHY
+     ========================================================= */
+  
+  h1,
+  h2,
+  h3 {
+    letter-spacing: -0.035em;
+  }
+  
+  h1 {
+    line-height: 1.06;
+  }
+  
+  h2 {
+    line-height: 1.15;
+  }
+  
+  .eyebrow {
+    color: var(--gold);
+  
+    font-size: 0.74rem;
+    font-weight: 750;
+  
+    letter-spacing: 0.19em;
+    line-height: 1.5;
+  
+    text-transform: uppercase;
+  }
+  
+  
+  /* =========================================================
+     6. SHARED BUTTON SYSTEM
+     ========================================================= */
+  
+  .start-screen button,
+  .restart-button,
+  .quiz-navigation button,
+  .error-screen button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  
+    min-height: 46px;
+    padding: 12px 22px;
+  
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+  
+    font-size: 0.9rem;
+    font-weight: 700;
+  
+    cursor: pointer;
+  
+    transition:
+      transform 180ms ease,
+      background 180ms ease,
+      border-color 180ms ease,
+      color 180ms ease,
+      box-shadow 180ms ease,
+      opacity 180ms ease;
+  }
+  
+  .start-screen button,
+  .restart-button,
+  .error-screen button {
+    background: var(--gold);
+    color: #17130b;
+  
+    border-color: var(--gold);
+  }
+  
+  .start-screen button:hover:not(:disabled),
+  .restart-button:hover:not(:disabled),
+  .error-screen button:hover:not(:disabled) {
+    background: var(--gold-bright);
+    border-color: var(--gold-bright);
+  
+    transform: translateY(-2px);
+  
+    box-shadow: 0 9px 28px rgba(214, 179, 106, 0.17);
+  }
+  
+  button:disabled {
+    cursor: not-allowed;
+  }
+  
+  
+  /* =========================================================
+     7. START SCREEN
+     ========================================================= */
+  
+  .start-screen {
+    max-width: 1100px;
+  
+    padding: clamp(48px, 7vw, 100px) clamp(24px, 7vw, 100px);
+  
+    text-align: center;
+  
+    background:
+      radial-gradient(
+        ellipse at 50% 0%,
+        rgba(214, 179, 106, 0.075),
+        transparent 65%
+      ),
+      linear-gradient(
+        145deg,
+        rgba(255, 255, 255, 0.025),
+        transparent 60%
+      ),
+      var(--surface);
+  
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  
+    box-shadow:
+      0 35px 100px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.025);
+  }
+  
+  .start-screen h1 {
+    max-width: 950px;
+  
+    margin: 18px auto 0;
+  
+    color: var(--text);
+  
+    font-size: clamp(3rem, 7vw, 6.5rem);
+    font-weight: 750;
+  
+    letter-spacing: -0.06em;
+    line-height: 0.99;
+    text-wrap: balance;
+  }
+  
+  .start-screen > p:not(.eyebrow) {
+    max-width: 660px;
+  
+    margin: 26px auto 0;
+  
+    color: var(--text-soft);
+  
+    font-size: clamp(1rem, 1.4vw, 1.15rem);
+    line-height: 1.8;
+  }
+  
+  .start-screen button {
+    margin-top: 34px;
+  
+    min-width: 180px;
+    padding: 15px 28px;
+  
+    text-transform: uppercase;
+    letter-spacing: 0.055em;
+  }
+  
+  
+  /* =========================================================
+     8. QUIZ HEADER
+     ========================================================= */
+  
+  .quiz-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  
+    gap: 28px;
+  
+    margin-bottom: clamp(48px, 7vh, 88px);
+    padding-bottom: 22px;
+  
+    border-bottom: 1px solid rgba(255, 255, 255, 0.075);
+  }
+  
+  .question-number {
+    color: var(--gold);
+  
+    font-size: 0.82rem;
+    font-weight: 750;
+  
+    letter-spacing: 0.12em;
+  
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+  }
+  
+  .question-total {
+    margin-left: 7px;
+  
+    color: var(--text-muted);
+  
+    font-size: 0.82rem;
+    font-weight: 600;
+  }
+  
+  
+  /* =========================================================
+     9. PROGRESS BAR
+     ========================================================= */
+  
+  .progress {
+    width: clamp(150px, 24vw, 380px);
+    height: 4px;
+  
+    flex: 0 1 auto;
+  
+    overflow: hidden;
+  
+    background: rgba(255, 255, 255, 0.09);
+  
+    border-radius: 999px;
+  }
+  
+  .progress-bar {
+    width: 0;
+    height: 100%;
+  
+    background: linear-gradient(
+      90deg,
+      var(--gold-muted),
+      var(--gold-bright)
+    );
+  
+    border-radius: inherit;
+  
+    transition: width 350ms ease;
+  }
+  
+  
+  /* =========================================================
+     10. QUESTION CONTENT
+     ========================================================= */
+  
+  .question {
+    width: 100%;
+    max-width: 1500px;
+  }
+  
+  .question-title {
+    margin-bottom: 20px;
+  
+    color: var(--gold);
+  
+    font-size: 0.82rem;
+    font-weight: 750;
+  
+    letter-spacing: 0.15em;
+    line-height: 1.5;
+  
+    text-transform: uppercase;
+  }
+  
+  .question h1 {
+    max-width: 1250px;
+  
+    color: var(--text);
+  
+    font-size: clamp(2.4rem, 5vw, 5.5rem);
+    font-weight: 680;
+  
+    letter-spacing: -0.055em;
+    line-height: 1.08;
+  
+    text-wrap: balance;
+  }
+  
+  
+  /* =========================================================
+     11. ANSWER OPTIONS
+     ========================================================= */
+  
+  .options {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  
+    gap: 14px;
+  
+    width: 100%;
+  
+    margin-top: clamp(34px, 5vh, 56px);
+  }
+  
+  /* On wider screens, answers become a spacious two-column layout. */
+  
+  .option {
+    position: relative;
+  
+    display: flex;
+    align-items: center;
+  
+    width: 100%;
+    min-width: 0;
+    min-height: 82px;
+  
+    gap: 18px;
+    padding: 22px 24px;
+  
+    background:
+      linear-gradient(
+        145deg,
+        rgba(255, 255, 255, 0.018),
+        transparent 65%
+      ),
+      var(--surface);
+  
+    color: var(--text);
+  
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+  
+    text-align: left;
+  
+    cursor: pointer;
+  
+    transition:
+      background 180ms ease,
+      border-color 180ms ease,
+      transform 180ms ease,
+      box-shadow 180ms ease;
+  }
+  
+  .option:hover:not(:disabled) {
+    background: var(--surface-hover);
+  
+    border-color: var(--border-strong);
+  
+    transform: translateY(-2px);
+  
+    box-shadow: 0 9px 25px rgba(0, 0, 0, 0.17);
+  }
+  
+  .option:disabled {
+    cursor: default;
+  }
+  
+  
+  /* =========================================================
+     12. SELECTED ANSWER
+     ========================================================= */
+  
+  .option.selected {
+    background:
+      linear-gradient(
+        100deg,
+        rgba(214, 179, 106, 0.13),
+        rgba(214, 179, 106, 0.035)
+      ),
+      var(--surface-selected);
+  
+    border-color: var(--gold);
+  
+    box-shadow:
+      inset 3px 0 0 var(--gold),
+      0 8px 24px rgba(0, 0, 0, 0.14);
+  }
+  
+  
+  /* =========================================================
+     13. ANSWER LETTER
+     ========================================================= */
+  
+  .option-letter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+  
+    background: rgba(255, 255, 255, 0.018);
+  
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 50%;
+  
+    color: var(--text-muted);
+  
+    font-size: 0.82rem;
+    font-weight: 750;
+  
+    transition:
+      background 180ms ease,
+      border-color 180ms ease,
+      color 180ms ease;
+  }
+  
+  .option:hover:not(:disabled) .option-letter {
+    color: var(--gold);
+    border-color: var(--border-strong);
+  }
+  
+  .option.selected .option-letter {
+    background: var(--gold);
+  
+    border-color: var(--gold);
+  
+    color: #17130b;
+  }
+  
+  
+  /* =========================================================
+     14. ANSWER TEXT
+     ========================================================= */
+  
+  .option-text {
+    min-width: 0;
+  
+    color: var(--text-soft);
+  
+    font-size: clamp(0.96rem, 1.15vw, 1.08rem);
+    line-height: 1.65;
+  
+    overflow-wrap: anywhere;
+  }
+  
+  .option.selected .option-text {
+    color: var(--text);
+  }
+  
+  
+  /* =========================================================
+     15. QUIZ NAVIGATION
+     ========================================================= */
+  
+  .quiz-navigation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  
+    gap: 16px;
+  
+    margin-top: 34px;
+    padding-top: 24px;
+  
+    border-top: 1px solid rgba(255, 255, 255, 0.075);
+  }
+  
+  .quiz-navigation button {
+    min-width: 112px;
+  
+    background: rgba(255, 255, 255, 0.015);
+  
+    color: var(--text-soft);
+  
+    border-color: var(--border);
+  }
+  
+  .quiz-navigation button:hover:not(:disabled) {
+    background: var(--surface-hover);
+  
+    border-color: var(--border-strong);
+  
+    color: var(--text);
+  }
+  
+  .quiz-navigation button:disabled {
+    opacity: 0.35;
+  }
+  
+  .quiz-navigation button:last-child {
+    background: var(--gold);
+  
+    border-color: var(--gold);
+  
+    color: #17130b;
+  }
+  
+  .quiz-navigation button:last-child:hover:not(:disabled) {
+    background: var(--gold-bright);
+    border-color: var(--gold-bright);
+  
+    transform: translateY(-1px);
+  }
+  
+  
+  /* =========================================================
+     16. QUIZ ERROR
+     ========================================================= */
+  
+  .quiz-error {
+    margin-top: 20px;
+    padding: 14px 16px;
+  
+    background: rgba(226, 138, 138, 0.07);
+  
+    border: 1px solid rgba(226, 138, 138, 0.2);
+    border-radius: var(--radius-sm);
+  
+    color: var(--danger);
+  
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+  
+  
+  /* =========================================================
+     17. LOADING SCREEN
+     ========================================================= */
+  
+  .loading-screen {
+    max-width: 1000px;
+  
+    padding: 60px 20px;
+  
+    text-align: center;
+  }
+  
+  .loading-screen h1 {
+    color: var(--text-soft);
+  
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 600;
+  }
+  
+  
+  /* =========================================================
+     18. ERROR SCREEN
+     ========================================================= */
+  
+  .error-screen {
+    padding: clamp(32px, 5vw, 64px);
+  
+    text-align: center;
+  
+    background:
+      linear-gradient(
+        145deg,
+        rgba(255, 255, 255, 0.02),
+        transparent
+      ),
+      var(--surface);
+  
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.3);
+  }
+  
+  .error-screen h1 {
+    color: var(--text);
+  
+    font-size: clamp(1.8rem, 4vw, 3rem);
+  }
+  
+  .error-screen p {
+    max-width: 650px;
+  
+    margin: 18px auto 0;
+  
+    color: var(--text-soft);
+  
+    line-height: 1.75;
+  }
+  
+  .error-screen button {
+    margin-top: 28px;
+  }
+  
+  
+  /* =========================================================
+     19. RESULTS HEADER
+     ========================================================= */
+  
+  .results-header {
+    padding: clamp(28px, 5vw, 64px) 0 clamp(42px, 6vw, 80px);
+  
+    text-align: center;
+  }
+  
+  .results-header h1 {
+    max-width: 1500px;
+  
+    margin: 18px auto 0;
+  
+    color: var(--text);
+  
+    font-size: clamp(3.4rem, 9vw, 8rem);
+    font-weight: 760;
+  
+    letter-spacing: -0.075em;
+    line-height: 0.96;
+  
+    overflow-wrap: anywhere;
+    text-wrap: balance;
+  }
+  
+  .result-score {
+    margin-top: 24px;
+  
+    color: var(--gold);
+  
+    font-size: clamp(1.2rem, 2.2vw, 1.7rem);
+    font-weight: 750;
+  
+    letter-spacing: 0.025em;
+    font-variant-numeric: tabular-nums;
+  }
+  
+  
+  /* =========================================================
+     20. CHARACTER MESSAGE — SHARED
+     ========================================================= */
+  
+  .character-message {
+    width: 100%;
+    min-width: 0;
+  }
+  
+  .message-label {
+    color: var(--gold);
+  
+    font-size: 0.74rem;
+    font-weight: 750;
+  
+    letter-spacing: 0.18em;
+    line-height: 1.5;
+  
+    text-transform: uppercase;
+  }
+  
+  .message-text {
+    color: var(--text);
+  
+    font-size: clamp(1rem, 1.3vw, 1.2rem);
+    line-height: 1.8;
+  
+    overflow-wrap: anywhere;
+  }
+  
+  
+  /* =========================================================
+     21. WHY YOU MATCH
+     ========================================================= */
+  
+  .primary-message {
+    width: 100%;
+  
+    margin-bottom: clamp(36px, 5vw, 64px);
+  
+    padding: clamp(28px, 5vw, 60px);
+  
+    text-align: center;
+  
+    background:
+      radial-gradient(
+        ellipse at 50% 0%,
+        rgba(214, 179, 106, 0.06),
+        transparent 70%
+      ),
+      var(--surface);
+  
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  }
+  
+  .primary-message .message-text {
+    max-width: 1150px;
+  
+    margin: 18px auto 0;
+  
+    color: var(--text-soft);
+  
+    font-size: clamp(1.02rem, 1.5vw, 1.3rem);
+    line-height: 1.85;
+  }
+  
+  
+  /* =========================================================
+     22. RESULT BREAKDOWN
+     ========================================================= */
+  
+  .result-breakdown {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  
+    gap: 16px;
+  
+    margin-bottom: var(--section-gap);
+  }
+  
+  .result-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  
+    min-width: 0;
+    min-height: 100px;
+  
+    gap: 14px;
+    padding: 22px 24px;
+  
+    background:
+      linear-gradient(
+        145deg,
+        rgba(255, 255, 255, 0.025),
+        transparent 70%
+      ),
+      var(--surface);
+  
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+  
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+  
+    transition:
+      border-color 180ms ease,
+      background 180ms ease,
+      transform 180ms ease;
+  }
+  
+  .result-card:hover {
+    background: var(--surface-hover);
+    border-color: var(--border-strong);
+  
+    transform: translateY(-2px);
+  }
+  
+  .result-card span {
+    min-width: 0;
+  
+    color: var(--text-muted);
+  
+    font-size: 0.88rem;
+    font-weight: 600;
+  
+    line-height: 1.5;
+  }
+  
+  .result-card strong {
+    color: var(--gold);
+  
+    font-size: clamp(1.1rem, 1.7vw, 1.5rem);
+    font-weight: 750;
+  
+    text-align: right;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+  
+  
+  /* =========================================================
+     23. SECTION HEADINGS
+     ========================================================= */
+  
+  .other-matches-heading {
+    margin-bottom: 32px;
+  
+    text-align: center;
+  }
+  
+  .other-matches-heading h2 {
+    margin-top: 12px;
+  
+    color: var(--text);
+  
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 700;
+  
+    letter-spacing: -0.05em;
+    line-height: 1.08;
+  
+    text-wrap: balance;
+  }
+  
+  
+  /* =========================================================
+     24. YOUR TRAIT PROFILE
+     ========================================================= */
+  
+  .trait-profile {
+    width: 100%;
+  
+    margin-bottom: var(--section-gap);
+    padding: clamp(28px, 4vw, 52px);
+  
+    background:
+      linear-gradient(
+        145deg,
+        rgba(255, 255, 255, 0.018),
+        transparent 65%
+      ),
+      var(--surface);
+  
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  }
+  
+  .trait-profile .other-matches-heading {
+    margin-bottom: 34px;
+  }
+  
+  .trait-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  
+    gap: 26px 44px;
+  
+    width: 100%;
+    margin: 0;
+  }
+  
+  .trait-row {
+    display: grid;
+    align-content: start;
+  
+    gap: 10px;
+    min-width: 0;
+  }
+  
+  .trait-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+  
+    gap: 16px;
+  }
+  
+  .trait-header span {
+    min-width: 0;
+  
+    color: var(--text-soft);
+  
+    font-size: 0.94rem;
+    font-weight: 600;
+  }
+  
+  .trait-header strong {
+    flex: 0 0 auto;
+  
+    color: var(--gold);
+  
+    font-size: 0.9rem;
+    font-weight: 750;
+  
+    font-variant-numeric: tabular-nums;
+  }
+  
+  .trait-bar {
+    width: 100%;
+    height: 8px;
+  
+    overflow: hidden;
+  
+    background: rgba(255, 255, 255, 0.075);
+  
+    border-radius: 999px;
+  }
+  
+  .trait-bar-fill {
+    height: 100%;
+  
+    background: linear-gradient(
+      90deg,
+      var(--gold-muted),
+      var(--gold-bright)
+    );
+  
+    border-radius: inherit;
+  
+    transition: width 600ms ease;
+  }
+  
+  
+  /* =========================================================
+     25. OTHER CLOSE MATCHES
+     ========================================================= */
+  
+  .other-matches {
+    width: 100%;
+  }
+  
+  .other-matches-heading {
+    margin-bottom: 36px;
+  }
+  
+  
+  /* =========================================================
+     26. SECONDARY MATCH CARDS
+     ========================================================= */
+  
+  .secondary-message {
+    display: flex;
+    flex-direction: column;
+  
+    width: 100%;
+    min-height: 250px;
+  
+    margin-bottom: 16px;
+    padding: clamp(28px, 4vw, 48px);
+  
+    background:
+      radial-gradient(
+        ellipse at 100% 0%,
+        rgba(214, 179, 106, 0.035),
+        transparent 50%
+      ),
+      linear-gradient(
+        145deg,
+        rgba(255, 255, 255, 0.02),
+        transparent 65%
+      ),
+      var(--surface);
+  
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  
+    box-shadow:
+      0 18px 45px rgba(0, 0, 0, 0.13),
+      inset 0 1px 0 rgba(255, 255, 255, 0.018);
+  
+    transition:
+      border-color 180ms ease,
+      transform 180ms ease,
+      box-shadow 180ms ease;
+  }
+  
+  .secondary-message:hover {
+    border-color: var(--border-strong);
+  
+    transform: translateY(-2px);
+  
+    box-shadow: 0 22px 48px rgba(0, 0, 0, 0.2);
+  }
+  
+  .secondary-message-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  
+    gap: 28px;
+  }
+  
+  .secondary-message-header > div {
+    min-width: 0;
+  }
+  
+  .rank-label {
+    display: block;
+  
+    color: var(--text-muted);
+  
+    font-size: 0.92rem;
+    font-weight: 600;
+  
+    letter-spacing: 0.04em;
+    line-height: 1.4;
+  }
+  
+  .secondary-message h3 {
+    margin-top: 12px;
+  
+    color: var(--text);
+  
+    font-size: clamp(1.65rem, 3vw, 2.5rem);
+    font-weight: 730;
+  
+    letter-spacing: -0.045em;
+    line-height: 1.12;
+  
+    overflow-wrap: anywhere;
+  }
+  
+  .secondary-message-header > strong {
+    flex: 0 0 auto;
+  
+    padding-top: 2px;
+  
+    color: var(--gold);
+  
+    font-size: clamp(1.35rem, 2.4vw, 2rem);
+    font-weight: 750;
+  
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+  
+  .secondary-message .message-text {
+    margin-top: 28px;
+  
+    color: var(--text-soft);
+  
+    font-size: clamp(1rem, 1.2vw, 1.12rem);
+    line-height: 1.8;
+  }
+  
+  
+  /* =========================================================
+     27. FULL RANKING
+     ========================================================= */
+  
+  .ranking-board {
+    width: 100%;
+  
+    margin-top: var(--section-gap);
+    padding: clamp(24px, 4vw, 48px);
+  
+    background:
+      linear-gradient(
+        145deg,
+        rgba(255, 255, 255, 0.018),
+        transparent 65%
+      ),
+      var(--surface);
+  
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.16);
+  }
+  
+  .ranking-board h2 {
+    margin-bottom: 22px;
+  
+    color: var(--text);
+  
+    font-size: clamp(1.25rem, 2vw, 1.6rem);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+  }
+  
+  .ranking-row {
+    display: grid;
+    grid-template-columns: 52px minmax(0, 1fr) minmax(64px, auto);
+  
+    align-items: center;
+  
+    gap: 18px;
+  
+    min-width: 0;
+    padding: 17px 6px;
+  
+    border-top: 1px solid rgba(255, 255, 255, 0.065);
+  
+    transition: background 160ms ease;
+  }
+  
+  .ranking-row > span:first-child {
+    color: var(--text-muted);
+  
+    font-size: 0.85rem;
+    font-weight: 650;
+  
+    font-variant-numeric: tabular-nums;
+  }
+  
+  .ranking-row strong {
+    min-width: 0;
+  
+    color: var(--text-soft);
+  
+    font-size: 0.96rem;
+    font-weight: 600;
+  
+    overflow-wrap: anywhere;
+  }
+  
+  .ranking-row > span:last-child {
+    color: var(--gold);
+  
+    font-size: 0.9rem;
+    font-weight: 750;
+  
+    text-align: right;
+    white-space: nowrap;
+  
+    font-variant-numeric: tabular-nums;
+  }
+  
+  .ranking-row:first-of-type strong {
+    color: var(--text);
+  }
+  
+  
+  /* =========================================================
+     28. RESTART BUTTON
+     ========================================================= */
+  
+  .restart-button {
+    display: flex;
+  
+    margin: 36px auto 0;
+    padding: 14px 28px;
+  }
+  
+  
+  /* =========================================================
+     29. SCORE EXPLANATION
+     ========================================================= */
+  
+  .score-explanation {
+    max-width: 1000px;
+  
+    margin: 60px auto 0;
+    padding-top: 30px;
+  
+    color: var(--text-muted);
+  
+    font-size: 0.88rem;
+    line-height: 1.8;
+  
+    text-align: center;
+  
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+  }
+  
+  .score-explanation h3 {
+    margin-bottom: 14px;
+  
+    color: var(--text-soft);
+  
+    font-size: 1rem;
+    font-weight: 700;
+  }
+  
+  .score-explanation p + p {
+    margin-top: 12px;
+  }
+  
+  .score-explanation strong {
+    color: var(--text-soft);
+  }
+  
+  
+  /* =========================================================
+     30. LARGE DESKTOPS
+     ========================================================= */
+  
+  @media (min-width: 1500px) {
+    .app {
+      padding-inline: clamp(64px, 5vw, 100px);
+    }
+  
+    .quiz-header {
+      margin-bottom: 88px;
+    }
+  
+    .options {
+      gap: 18px;
+    }
+  
+    .option {
+      min-height: 92px;
+      padding: 26px 30px;
+    }
+  
+    .result-breakdown {
+      gap: 20px;
+    }
+  
+    .result-card {
+      min-height: 116px;
+      padding: 28px;
+    }
+  
+    .secondary-message {
+      min-height: 270px;
+    }
+  }
+  
+  
+  /* =========================================================
+     31. TABLETS
+     ========================================================= */
+  
+  @media (max-width: 1000px) {
+    :root {
+      --page-padding: 28px;
+      --section-gap: 60px;
+    }
+  
+    .result-breakdown {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  
+    .trait-list {
+      gap: 24px 28px;
+    }
+  
+    .question h1 {
+      font-size: clamp(2.4rem, 5.5vw, 4rem);
+    }
+  
+    .results-header h1 {
+      font-size: clamp(3.2rem, 9vw, 6rem);
+    }
+  }
+  
+  
+  /* =========================================================
+     32. MOBILE
+     ========================================================= */
+  
+  @media (max-width: 700px) {
+    :root {
+      --page-padding: 18px;
+      --section-gap: 48px;
+    }
+  
+    .app {
+      align-items: flex-start;
+  
+      padding-top: 28px;
+      padding-bottom: 36px;
+    }
+  
+    .start-screen {
+      padding: 48px 24px;
+    }
+  
+    .start-screen h1 {
+      font-size: clamp(2.8rem, 11vw, 4.2rem);
+    }
+  
+    .start-screen > p:not(.eyebrow) {
+      margin-top: 20px;
+  
+      font-size: 0.98rem;
+      line-height: 1.75;
+    }
+  
+    .quiz-header {
+      gap: 14px;
+  
+      margin-bottom: 44px;
+      padding-bottom: 18px;
+    }
+  
+    .question-number,
+    .question-total {
+      font-size: 0.74rem;
+    }
+  
+    .progress {
+      width: clamp(90px, 32vw, 180px);
+    }
+  
+    .question-title {
+      margin-bottom: 16px;
+  
+      font-size: 0.74rem;
+    }
+  
+    .question h1 {
+      font-size: clamp(2rem, 7vw, 3.2rem);
+      line-height: 1.12;
+    }
+  
+    .options {
+      grid-template-columns: minmax(0, 1fr);
+  
+      gap: 11px;
+      margin-top: 30px;
+    }
+  
+    .option {
+      min-height: 68px;
+  
+      gap: 14px;
+      padding: 17px;
+    }
+  
+    .option-letter {
+      width: 34px;
+      height: 34px;
+      flex-basis: 34px;
+    }
+  
+    .option-text {
+      font-size: 0.96rem;
+      line-height: 1.6;
+    }
+  
+    .quiz-navigation {
+      gap: 12px;
+  
+      margin-top: 26px;
+      padding-top: 20px;
+    }
+  
+    .quiz-navigation button {
+      min-width: 0;
+      padding: 11px 16px;
+    }
+  
+  
+    /* Results */
+  
+    .results-header {
+      padding-top: 20px;
+      padding-bottom: 38px;
+    }
+  
+    .results-header h1 {
+      margin-top: 14px;
+  
+      font-size: clamp(2.8rem, 12vw, 4.6rem);
+      line-height: 1;
+    }
+  
+    .result-score {
+      margin-top: 18px;
+      font-size: 1.2rem;
+    }
+  
+    .primary-message {
+      margin-bottom: 32px;
+      padding: 28px 22px;
+    }
+  
+    .primary-message .message-text {
+      font-size: 1rem;
+      line-height: 1.8;
+    }
+  
+    .result-breakdown {
+      grid-template-columns: minmax(0, 1fr);
+  
+      gap: 10px;
+      margin-bottom: var(--section-gap);
+    }
+  
+    .result-card {
+      min-height: 72px;
+      padding: 18px 20px;
+    }
+  
+    .result-card strong {
+      font-size: 1.15rem;
+    }
+  
+  
+    /* Traits */
+  
+    .trait-profile {
+      margin-bottom: var(--section-gap);
+      padding: 26px 20px;
+    }
+  
+    .trait-profile .other-matches-heading {
+      margin-bottom: 26px;
+    }
+  
+    .trait-list {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 20px;
+    }
+  
+    .trait-header span {
+      font-size: 0.9rem;
+    }
+  
+    .trait-header strong {
+      font-size: 0.88rem;
+    }
+  
+  
+    /* Other matches */
+  
+    .other-matches-heading {
+      margin-bottom: 24px;
+    }
+  
+    .other-matches-heading h2 {
+      font-size: clamp(1.9rem, 7vw, 2.5rem);
+    }
+  
+    .secondary-message {
+      min-height: 0;
+  
+      margin-bottom: 12px;
+      padding: 25px 22px;
+    }
+  
+    .secondary-message-header {
+      gap: 14px;
+    }
+  
+    .rank-label {
+      font-size: 0.86rem;
+    }
+  
+    .secondary-message h3 {
+      margin-top: 9px;
+  
+      font-size: clamp(1.35rem, 5.5vw, 1.8rem);
+    }
+  
+    .secondary-message-header > strong {
+      font-size: 1.2rem;
+    }
+  
+    .secondary-message .message-text {
+      margin-top: 22px;
+  
+      font-size: 0.96rem;
+      line-height: 1.75;
+    }
+  
+  
+    /* Ranking */
+  
+    .ranking-board {
+      margin-top: var(--section-gap);
+      padding: 22px 18px;
+    }
+  
+    .ranking-board h2 {
+      margin-bottom: 16px;
+    }
+  
+    .ranking-row {
+      grid-template-columns: 30px minmax(0, 1fr) auto;
+  
+      gap: 10px;
+      padding: 14px 0;
+    }
+  
+    .ranking-row strong {
+      font-size: 0.87rem;
+    }
+  
+    .ranking-row > span:last-child {
+      font-size: 0.82rem;
+    }
+  
+    .score-explanation {
+      margin-top: 44px;
+      padding-top: 24px;
+  
+      font-size: 0.84rem;
+    }
+  }
+  
+  
+  /* =========================================================
+     33. SMALL PHONES
+     ========================================================= */
+  
+  @media (max-width: 400px) {
+    :root {
+      --page-padding: 12px;
+    }
+  
+    .app {
+      padding-top: 20px;
+      padding-bottom: 28px;
+    }
+  
+    .start-screen {
+      padding: 38px 18px;
+    }
+  
+    .start-screen h1 {
+      font-size: 2.65rem;
+    }
+  
+    .quiz-header {
+      gap: 10px;
+    }
+  
+    .progress {
+      width: 88px;
+    }
+  
+    .question h1 {
+      font-size: 1.95rem;
+    }
+  
+    .option {
+      gap: 11px;
+      padding: 15px 13px;
+    }
+  
+    .option-text {
+      font-size: 0.91rem;
+    }
+  
+    .quiz-navigation button {
+      padding: 10px 12px;
+      font-size: 0.82rem;
+    }
+  
+    .results-header h1 {
+      font-size: 2.8rem;
+    }
+  
+    .result-card {
+      padding: 16px;
+    }
+  
+    .result-card span {
+      font-size: 0.82rem;
+    }
+  
+    .result-card strong {
+      font-size: 1rem;
+    }
+  
+    .trait-profile {
+      padding: 23px 16px;
+    }
+  
+    .secondary-message {
+      padding: 22px 17px;
+    }
+  
+    .secondary-message-header {
+      gap: 9px;
+    }
+  
+    .secondary-message h3 {
+      font-size: 1.3rem;
+    }
+  
+    .secondary-message-header > strong {
+      font-size: 1.05rem;
+    }
+  
+    .ranking-board {
+      padding: 20px 14px;
+    }
+  
+    .ranking-row {
+      gap: 8px;
+    }
+  
+    .ranking-row strong {
+      font-size: 0.8rem;
+    }
+  
+    .ranking-row > span:last-child {
+      font-size: 0.76rem;
+    }
+  }
+  
+  
+  /* =========================================================
+     34. ACCESSIBILITY & REDUCED MOTION
+     ========================================================= */
+  
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      scroll-behavior: auto !important;
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+  
+
+/* Centre the fifth answer beneath the first four */
+
+.option:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+  justify-self: center;
+  width: calc(50% - 7px);
+}
+
+/* Keep the fifth answer full-width on mobile */
+@media (max-width: 700px) {
+  .option:last-child:nth-child(odd) {
+    grid-column: 1;
+    width: 100%;
+  }
+}
+
+
+/* ==========================================================
+   WELCOME / START PAGE
+   ========================================================== */
+
+   .welcome-screen {
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(28px, 6vw, 72px) 24px;
+    overflow: hidden;
+    background:
+      radial-gradient(
+        ellipse at 50% 35%,
+        rgba(120, 91, 43, 0.13),
+        transparent 55%
+      ),
+      #080808;
+  }
+  
+  .welcome-content {
+    width: 100%;
+    max-width: 760px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .welcome-eyebrow {
+    color: #d8b66a;
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    margin-bottom: 24px;
+  }
+  
+  /* Magical night-sky artwork */
+  
+  .welcome-art {
+    position: relative;
+    isolation: isolate;
+    width: 100%;
+    max-width: 650px;
+    height: clamp(180px, 29vw, 270px);
+    overflow: hidden;
+    border: 1px solid rgba(216, 182, 106, 0.2);
+    border-radius: 14px;
+    background:
+      radial-gradient(
+        ellipse at 50% 100%,
+        rgba(130, 103, 57, 0.38),
+        transparent 48%
+      ),
+      linear-gradient(
+        180deg,
+        #111322 0%,
+        #17172a 52%,
+        #30243a 100%
+      );
+  }
+  
+  .welcome-moon {
+    position: absolute;
+    top: 17%;
+    right: 18%;
+    width: clamp(38px, 7vw, 65px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: #eadcb7;
+    box-shadow: 0 0 35px rgba(234, 220, 183, 0.22);
+  }
+  
+  .welcome-star {
+    position: absolute;
+    z-index: 1;
+    color: #f1dfad;
+  }
+  
+  .star-one {
+    top: 22%;
+    left: 20%;
+    font-size: 19px;
+  }
+  
+  .star-two {
+    top: 40%;
+    right: 29%;
+    font-size: 24px;
+  }
+  
+  .star-three {
+    top: 15%;
+    left: 43%;
+    font-size: 13px;
+  }
+  
+  .welcome-castle {
+    position: absolute;
+    z-index: 2;
+    bottom: 19%;
+    left: 50%;
+    width: 58%;
+    height: 62%;
+    transform: translateX(-50%);
+  }
+  
+  .castle-building {
+    position: absolute;
+    bottom: 0;
+    left: 12%;
+    width: 76%;
+    height: 53%;
+    border: 1px solid #75634f;
+    background: linear-gradient(90deg, #191923, #30283a, #191923);
+  }
+  
+  .castle-tower {
+    position: absolute;
+    bottom: 40%;
+    width: 18%;
+    background: #242130;
+    border: 1px solid #75634f;
+  }
+  
+  .castle-tower::before {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: -12%;
+    width: 124%;
+    height: 38%;
+    background: #3b3040;
+    clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  }
+  
+  .tower-left {
+    left: 7%;
+    height: 43%;
+  }
+  
+  .tower-centre {
+    left: 39%;
+    height: 86%;
+    width: 22%;
+  }
+  
+  .tower-right {
+    right: 7%;
+    height: 55%;
+  }
+  
+  .castle-window {
+    position: absolute;
+    bottom: 35%;
+    width: 7%;
+    height: 25%;
+    border-radius: 50% 50% 0 0;
+    background: #d8b66a;
+    box-shadow: 0 0 8px rgba(216, 182, 106, 0.3);
+  }
+  
+  .window-one {
+    left: 25%;
+  }
+  
+  .window-two {
+    left: 47%;
+  }
+  
+  .window-three {
+    right: 20%;
+  }
+  
+  .castle-door {
+    position: absolute;
+    bottom: 0;
+    left: 43%;
+    width: 15%;
+    height: 48%;
+    border-radius: 50% 50% 0 0;
+    background: #0c0c12;
+  }
+  
+  .welcome-horizon {
+    position: absolute;
+    z-index: 3;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 20%;
+    background: linear-gradient(
+      0deg,
+      #09090d,
+      rgba(9, 9, 13, 0.75)
+    );
+  }
+  
+  /* Heading and introduction */
+  
+  .welcome-title {
+    margin: 32px 0 16px;
+    color: #f3e6c6;
+    font-size: clamp(2rem, 5.5vw, 3.5rem);
+    line-height: 1.12;
+    letter-spacing: -0.045em;
+    font-weight: 700;
+  }
+  
+  .welcome-description {
+    max-width: 550px;
+    margin: 0;
+    color: #c6c0b4;
+    font-size: clamp(0.95rem, 2vw, 1.1rem);
+    line-height: 1.8;
+  }
+  
+  .welcome-details {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px 28px;
+    margin: 26px 0 30px;
+    color: #d8b66a;
+    font-size: 0.9rem;
+  }
+  
+  /* Start button */
+  
+  .welcome-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: min(100%, 340px);
+    min-height: 56px;
+    padding: 16px 24px;
+    border: 1px solid #d8b66a;
+    border-radius: 8px;
+    background: #d8b66a;
+    color: #17130c;
+    font: inherit;
+    font-size: 0.88rem;
+    font-weight: 800;
+    letter-spacing: 0.07em;
+    cursor: pointer;
+    transition:
+      background 180ms ease,
+      color 180ms ease,
+      transform 180ms ease;
+  }
+  
+  .welcome-button:hover {
+    background: transparent;
+    color: #e8cc88;
+    transform: translateY(-2px);
+  }
+  
+  .welcome-button:focus-visible {
+    outline: 2px solid #f3e6c6;
+    outline-offset: 5px;
+  }
+  
+  .welcome-note {
+    margin: 22px 0 0;
+    color: #898276;
+    font-size: 0.82rem;
+  }
+  
+  /* Mobile layout */
+  
+  @media (max-width: 600px) {
+    .welcome-screen {
+      padding: 32px 20px;
+    }
+  
+    .welcome-eyebrow {
+      font-size: 0.68rem;
+    }
+  
+    .welcome-art {
+      height: 190px;
+    }
+  
+    .welcome-title {
+      margin-top: 26px;
+    }
+  
+    .welcome-description {
+      line-height: 1.7;
+    }
+  
+    .welcome-details {
+      gap: 12px 20px;
+    }
+  }
+  
+  @media (prefers-reduced-motion: reduce) {
+    .welcome-button {
+      transition: none;
+    }
+  
+    .welcome-button:hover {
+      transform: none;
+    }
+  }
+  
+  
+.welcome-art {
+  width: 100%;
+  max-width: 760px;
+  height: clamp(200px, 35vh, 360px);
+  overflow: hidden;
+  border: 1px solid rgba(216, 182, 106, 0.25);
+  border-radius: 14px;
+  background: #101013;
+}
+
+.welcome-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.image-copyright {
+  width: 100%;
+  max-width: 760px;
+  margin: 8px 0 0;
+  color: #898276;
+  font-size: 0.72rem;
+  line-height: 1.5;
+  text-align: right;
+}
+
+
+/* ============================================================
+   UPCOMING QUIZ TEASER
+   ============================================================ */
+
+   .upcoming-quiz {
+    width: 100%;
+    box-sizing: border-box;
+  
+    margin: 42px 0 0;
+    padding: 26px 24px;
+    border: 1px solid cyan;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.035);
+    text-align: center;
+  }
+  
+  .upcoming-quiz-eyebrow {
+    display: block;
+    margin-bottom: 10px;
+    color: cyan;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+  }
+  
+  .upcoming-quiz-title {
+    margin: 0;
+    color: #ffffff;
+    font-size: 23px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+  
+  .upcoming-quiz-description {
+    max-width: 360px;
+    margin: 12px auto 18px;
+    color: rgba(255, 255, 255, 0.68);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  
+  .upcoming-quiz-badge {
+    display: inline-block;
+    padding: 8px 14px;
+    border: 1px solid rgba(181, 163, 255, 0.35);
+    border-radius: 6px;
+    color: cyan;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 2px;
+  }
+  
+  /* Mobile adjustments */
+  
+  @media (max-width: 480px) {
+    .upcoming-quiz {
+      margin-top: 32px;
+      padding: 22px 16px;
+    }
+  
+    .upcoming-quiz-title {
+      font-size: 21px;
+    }
+  }
+  
