@@ -10,6 +10,7 @@
     "backend": "node quiz_engine.js"
   },
   "dependencies": {
+    "@vercel/analytics": "^2.0.1",
     "@vitejs/plugin-react": "latest",
     "express": "^5.2.1",
     "react": "latest",

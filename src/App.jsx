@@ -2,6 +2,7 @@
 import { useState } from "react";
 import "./App.css";
 import { useEffect } from "react";
+import { Analytics } from "@vercel/analytics/react";
 
 import {
   getQuestions,
@@ -936,6 +937,7 @@ function App() {
           </p>
         )}
       </section>
+      <Analytics />
     </main>
   );
 }
