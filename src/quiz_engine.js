@@ -171,7 +171,7 @@
   Q1: {
     title: 'The turning point',
     question:
-      'Your group reaches a crossroads in a project, and nobody knows which direction will work best. What is your instinct?',
+      'Your group reaches a crossroad in a project, and nobody knows which direction will work best. What is your instinct?',
     options: {
       A: 'Choose a direction and get everyone moving.',
       B: 'Take a little time to work out which choice feels right.',
@@ -236,7 +236,7 @@
   Q6: {
     title: 'A day of your own',
     question:
-      'You have a completely free day and no one else has made plans for you. Which possibility appeals most?',
+      'You have a completely free day. Which possibility appeals most?',
     options: {
       A: 'Try an activity that gets me out of my comfort zone.',
       B: 'Spend the day with people who matter to me.',
@@ -422,7 +422,7 @@
     options: {
       A: 'The moment I chose to be brave and take part.',
       B: 'The people who were there and what we shared.',
-      C: 'The understanding I gained and the new ideas it inspired',
+      C: 'The understanding I gained and the new ideas it inspired.',
       D: 'The ideas, inspiration and memories it sparked.',
       E: 'The progress I made towards something I wanted to achieve.',
     },
