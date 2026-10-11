@@ -208,17 +208,17 @@
   },
 
   Q4: {
-    title: 'Someone needs you',
-    question:
-      'A friend is having a difficult time just when you have a lot on your own plate. What matters most in your response?',
-    options: {
-      A: 'Step in straight away rather than leave them struggling.',
-      B: 'Make sure they know I will be there for them.',
-      C: 'Work out what help would be most useful and how to provide it responsibly.',
-      D: 'Stay alongside them and make sure they feel supported.',
-      E: 'Think about how I can help without making the situation harder.',
-    },
+  title: 'Someone needs you',
+  question:
+    'You discover that someone in your group has made a mistake that could affect the whole team. How do you respond?',
+  options: {
+    A: 'Address the problem immediately, even if it means having an uncomfortable conversation.',
+    B: 'Stand by the person and make sure they know the team is still behind them.',
+    C: 'Investigate what went wrong and consider what could prevent it happening again.',
+    D: 'Talk it through with the person and help them put things right.',
+    E: 'Be honest about the mistake and insist that it is corrected, even if doing so causes difficulties.',
   },
+},
 
   Q5: {
     title: 'The rulebook',
